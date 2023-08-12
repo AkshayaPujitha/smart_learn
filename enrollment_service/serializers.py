@@ -30,3 +30,16 @@ class StripeSerializer(serializers.Serializer):
 
     def create(self, validated_data):
         return validated_data
+    
+class PayPalSerializer(serializers.Serializer):
+    course = serializers.CharField()
+    def validate_course(self, value):
+        try:
+            course = Course.objects.get(id=value)
+        except Course.DoesNotExist:
+            raise serializers.ValidationError("Course does not exist")
+        return course.id
+
+    def create(self, validated_data):
+        return validated_data
+
